@@ -19,7 +19,8 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
-import static org.nirob.ClientForm.pause;
+import static org.nirob.Main.pause;
+import static org.nirob.Main.play;
 import static org.nirob.Main.urlM;
 
 public class Server extends Thread {
@@ -46,11 +47,15 @@ public class Server extends Thread {
             System.out.println("Just connected to " + socket.getRemoteSocketAddress());
             //DataInputStream in = new DataInputStream(socket.getInputStream());
            // System.out.println(in.readUTF());
+           while(play == 0){
+                System.out.println(play);
+            }
 
-            try (InputStream is = socket.getInputStream();
-                    ObjectInputStream oiclient = new ObjectInputStream(is);   
+            try (   
                     OutputStream out = socket.getOutputStream();
-                    ObjectOutputStream oos = new ObjectOutputStream(out)
+                    ObjectOutputStream oos = new ObjectOutputStream(out);
+                    InputStream is = socket.getInputStream();
+                    ObjectInputStream oiclient = new ObjectInputStream(is)
                     ) {
 
                 frameGrabber.start();
@@ -62,17 +67,31 @@ public class Server extends Thread {
                         oos.writeObject(new Packet(bi));
                         oos.flush();
                     }
-                    ClientToServer cts = (ClientToServer) oiclient.readObject();
-                    pause = cts.pause;
-                    //String str;
+                    /*
+                    try {
+                        System.out.println(pause);
+                        Packet cts = (Packet) oiclient.readObject();
+                        // pause = cts.pause;
+                        System.out.println(pause);
+                    } catch (IOException | ClassNotFoundException ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    */
+                   // ClientToServer cts = (ClientToServer) oiclient.readObject();
+                   // pause = cts.pause;
+                   // System.out.println(pause);
+                   // String str;
                    // try(str = in.readUTF()){
                         
                    // }
                    // System.out.println(in.readUTF());
                     //String str = in.readUTF();
+                    
                     while(pause == 1){
-                        System.out.println(pause);
-                    }
+                       System.out.println(pause);
+                   }
+                    if(play == 0) break;
+
                 }
             }
 

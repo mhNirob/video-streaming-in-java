@@ -14,8 +14,8 @@ import java.net.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.nirob.ClientForm.pause;
-import static org.nirob.ClientForm.play;
+import static org.nirob.Main.pause;
+import static org.nirob.Main.play;
 
 public class Client extends Thread {
 
@@ -32,26 +32,36 @@ public class Client extends Thread {
     @Override
     public void run() {
 
-        System.out.println("Connecting to " + serverIP + "on port" + port);
+        System.out.println("Connecting to " + serverIP + " on port" + port);
         try (Socket client = new Socket(serverIP, port) ) {
 
             System.out.println("Just connected to " + client.getRemoteSocketAddress());
-            OutputStream outToServer = client.getOutputStream();
-            DataOutputStream out = new DataOutputStream(outToServer);
+            //OutputStream outToServer = client.getOutputStream();
+            //DataOutputStream out = new DataOutputStream(outToServer);
          
-            out.writeUTF(Integer.toString(play)+Integer.toString(pause));
+            //out.writeUTF(Integer.toString(play)+Integer.toString(pause));
 
             try (InputStream is = client.getInputStream();
                     ObjectInputStream ois = new ObjectInputStream(is);
                     OutputStream outToserver = client.getOutputStream();
-                    ObjectOutputStream ooServer = new ObjectOutputStream(out)) {
+                    ObjectOutputStream ooServer = new ObjectOutputStream(outToserver)
+                ){
                 while (true) {
                     try {
+                        //if(play == 0){
+                        //    break;
+                       // }
                         Packet packet = (Packet) ois.readObject();
+                        //frame.setSize(100, 100);
                         frame.setImage(packet.getImage());
+                        //if(play == )
+                        //packet.pplay = play;
+                        //packet.ppause = pause;
+                       // ooServer.writeObject(new Packet(pause,play));
                         //out.writeUTF(Integer.toString(play)+Integer.toString(pause));
-                        ooServer.writeObject(new ClientToServer(play,pause));
-                        ooServer.flush();
+                        //System.out.println("1");
+                        //ooServer.writeObject(new ClientToServer(play,pause));
+                        //ooServer.flush();
                     } catch (IOException | ClassNotFoundException ex) {
                         //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -23,13 +23,20 @@ import javax.imageio.ImageIO;
  * @author nirob
  */
 public class Packet implements Externalizable {
-    //private int play;
+    int pplay;
+    int ppause;
     private byte[] data;
 
     public Packet() {
         
     }
+    public Packet(int tplay, int tpause) {
+        pplay = tplay;
+        ppause = tpause;
+    }
     public Packet(BufferedImage image) {
+        //pplay = 0;
+        //ppause = 0;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", baos);
             data = baos.toByteArray();
